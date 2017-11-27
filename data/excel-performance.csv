@@ -1,0 +1,7 @@
+model,runs,elapsed
+"Excel (single)",1000,95.
+"Excel (single)",10000,937.
+"Excel (single)",100000,NA
+"Excel (multi)",1000,31.
+"Excel (multi)",10000,260.
+"Excel (multi)",100000,NA
