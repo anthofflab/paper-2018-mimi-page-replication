@@ -14,9 +14,9 @@ pop_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/pop_population
 pop_df = DataFrame(year = year, pop = sum(pop, 2), pop_compare = sum(pop_compare, 2))
 
 ## GDP
-gdp = m[:GDP,:gdp]
-gdp_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/gdp.csv")
-gdp_df = DataFrame(year = year, gdp = sum(gdp, 2), gdp_compare = sum(gdp_compare, 2))
+gdp = vec(sum(m[:GDP,:gdp], 2))
+gdp_compare = vec(sum(readpagedata(m,"../mimi-page.jl/test/validationdata/gdp.csv"), 2))
+gdp_df = DataFrame(year = year, gdp = gdp, gdp_compare = gdp_compare)
 
 ## Emissions
 emissions = m[:co2emissions,:e_globalCO2emissions]
