@@ -11,10 +11,12 @@ year = [2009, 2010, 2020, 2030, 2040, 2050, 2075, 2100, 2150, 2200]
 ## Population
 pop = m[:Population,:pop_population]
 pop_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/pop_population.csv")
+pop_df = DataFrame(year = year, pop = sum(pop, 2), pop_compare = sum(pop_compare, 2))
 
 ## GDP
 gdp = m[:GDP,:gdp]
 gdp_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/gdp.csv")
+gdp_df = DataFrame(year = year, gdp = sum(gdp, 2), gdp_compare = sum(gdp_compare, 2))
 
 ## Emissions
 emissions = m[:co2emissions,:e_globalCO2emissions]
@@ -30,6 +32,7 @@ temp_df = DataFrame(year = year, temp = temp, temp_compare = temp_compare)
 # From Discontinuity
 discdamages = m[:Discontinuity,:rcons_per_cap_DiscRemainConsumption]
 discdamages_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per_cap_DiscRemainConsumption.csv")
+damages_df = DataFrame(year = year, gdp = sum(gdp, 2), gdp_compare = sum(gdp_compare, 2))
 
 # From SLR
 slrdamages = m[:SLRDamages,:rcons_per_cap_SLRRemainConsumption]
@@ -42,6 +45,15 @@ mdamages_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per
 # Non-Market Damages
 nmdamages = m[:NonMarketDamages,:rcons_per_cap_NonMarketRemainConsumption]
 nmdamages_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per_cap_NonMarketRemainConsumption.csv")
+
+damages_df = DataFrame(year = year,
+    discdamages = sum(discdamages, 2), discdamages_compare = sum(discdamages_compare, 2),
+    slrdamages = sum(slrdamages, 2), slrdamages_compare = sum(slrdamages_compare, 2),
+    mdamages = sum(mdamages, 2), mdamages_compare = sum(mdamages_compare, 2),
+    nmdamages = sum(nmdamages, 2), nmdamages_compare = sum(nmdamages_compare, 2),
+    total_damages = sum(discdamages, 2)+ sum(slrdamages, 2) + sum(mdamages, 2) + sum(nmdamages, 2),
+    total_damages_compare = sum(discdamages_compare, 2) + sum(slrdamages_compare, 2) +
+    sum(mdamages_compare, 2) + sum(nmdamages_compare, 2))
 
 # Sum Damages
 total_damages =
