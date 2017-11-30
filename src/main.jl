@@ -9,9 +9,9 @@ run(m)
 year = [2009, 2010, 2020, 2030, 2040, 2050, 2075, 2100, 2150, 2200]
 
 ## Population
-pop = m[:Population,:pop_population]
-pop_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/pop_population.csv")
-pop_df = DataFrame(year = year, pop = sum(pop, 2), pop_compare = sum(pop_compare, 2))
+pop = vec(sum(m[:Population,:pop_population], 2))
+pop_compare = vec(sum(readpagedata(m,"../mimi-page.jl/test/validationdata/pop_population.csv"),2))
+pop_df = DataFrame(year = year, pop = pop, pop_compare = pop_compare)
 
 ## GDP
 gdp = vec(sum(m[:GDP,:gdp], 2))
@@ -30,40 +30,39 @@ temp_df = DataFrame(year = year, temp = temp, temp_compare = temp_compare)
 
 ## Damages
 # From Discontinuity
-discdamages = m[:Discontinuity,:rcons_per_cap_DiscRemainConsumption]
-discdamages_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per_cap_DiscRemainConsumption.csv")
-damages_df = DataFrame(year = year, gdp = sum(gdp, 2), gdp_compare = sum(gdp_compare, 2))
+discdamages = vec(sum(m[:Discontinuity,:rcons_per_cap_DiscRemainConsumption],2))
+discdamages_compare = vec(sum(readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per_cap_DiscRemainConsumption.csv"),2))
 
 # From SLR
-slrdamages = m[:SLRDamages,:rcons_per_cap_SLRRemainConsumption]
-slrdamages_compare = readpagedata(m, "../mimi-page.jl/test/validationdata/rcons_per_cap_SLRRemainConsumption.csv")
+slrdamages = vec(sum(m[:SLRDamages,:rcons_per_cap_SLRRemainConsumption],2))
+slrdamages_compare = vec(sum(readpagedata(m, "../mimi-page.jl/test/validationdata/rcons_per_cap_SLRRemainConsumption.csv"),2))
 
 # Market damages
-mdamages = m[:MarketDamages,:rcons_per_cap_MarketRemainConsumption]
-mdamages_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per_cap_MarketRemainConsumption.csv")
+mdamages = vec(sum(m[:MarketDamages,:rcons_per_cap_MarketRemainConsumption],2))
+mdamages_compare = vec(sum(readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per_cap_MarketRemainConsumption.csv"),2))
 
 # Non-Market Damages
-nmdamages = m[:NonMarketDamages,:rcons_per_cap_NonMarketRemainConsumption]
-nmdamages_compare = readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per_cap_NonMarketRemainConsumption.csv")
+nmdamages = vec(sum(m[:NonMarketDamages,:rcons_per_cap_NonMarketRemainConsumption],2))
+nmdamages_compare = vec(sum(readpagedata(m,"../mimi-page.jl/test/validationdata/rcons_per_cap_NonMarketRemainConsumption.csv"),2))
 
 damages_df = DataFrame(year = year,
-    discdamages = sum(discdamages, 2), discdamages_compare = sum(discdamages_compare, 2),
-    slrdamages = sum(slrdamages, 2), slrdamages_compare = sum(slrdamages_compare, 2),
-    mdamages = sum(mdamages, 2), mdamages_compare = sum(mdamages_compare, 2),
-    nmdamages = sum(nmdamages, 2), nmdamages_compare = sum(nmdamages_compare, 2),
-    total_damages = sum(discdamages, 2)+ sum(slrdamages, 2) + sum(mdamages, 2) + sum(nmdamages, 2),
-    total_damages_compare = sum(discdamages_compare, 2) + sum(slrdamages_compare, 2) +
-    sum(mdamages_compare, 2) + sum(nmdamages_compare, 2))
-
-# Sum Damages
-total_damages =
+    discdamages = discdamages, discdamages_compare = discdamages_compare,
+    slrdamages = slrdamages, slrdamages_compare = slrdamages_compare,
+    mdamages = mdamages, mdamages_compare = mdamages_compare,
+    nmdamages = nmdamages, nmdamages_compare = nmdamages_compare,
+    total_damages = discdamages + slrdamages + mdamages + nmdamages,
+    total_damages_compare = discdamages_compare + slrdamages_compare + mdamages_compare + nmdamages_compare)
 
 using RCall
 
 R"library(tidyverse)"
 # Population Plot
+R"pop_df = $pop_df %>% gather(pop, pop_compare, key = model, value = population)"
+R"pop_plot = ggplot(pop_df, aes(x = year, y = population)) + geom_line(aes(color = model))"
 
 # GDP Plot
+R"gdp_df = $gdp_df %>% gather(gdp, gdp_compare, key = model, value = gdp)"
+R"gdp_plot = ggplot(gdp_df, aes(x = year, y = gdp)) + geom_line(aes(color = model))"
 
 # Temperature Plot
 R"temp_df = $temp_df %>% gather(temp, temp_compare, key = model, value = temperature)"
@@ -74,7 +73,7 @@ R"emissions_df = $emissions_df %>% gather(emissions, emissions_compare, key = mo
 R"ggplot(emissions_df, aes(x = year, y = emissions)) + geom_line(aes(color = model))"
 
 # Damages Plot
-
-# Sum over regions
+R"tot_damages_df = $damages_df %>% gather(total_damages, total_damages_compare, key = model, value = damages)"
+R"tot_damages_plot = ggplot(tot_damages_df, aes(x = year, y = damages)) + geom_line(aes(color = model))"
 
 # Probabilistic Model title
