@@ -38,7 +38,7 @@ R"quants=merge(quants,quanterrors)"
 
 R"vars=c('td','tpc','tac','te')"
 R"col=c('darkorange','darkblue','darkgoldenrod','darkorchid4')"
-R"labs=c('Total Damages','Total Protection Costs','Total Adaptation Costs','Total Effect')"
+R"labs=c('Total Damages','Total Preventative Costs','Total Adaptation Costs','Total Effect')"
 
 excel=readtable("data/excel_page_mcresults.csv")
 @rput excel
@@ -50,7 +50,7 @@ R"x11()
 par(mfrow=c(2,2))
 for(i in 1:4){
   data=quants[which(quants$Variable==vars[i]),]
-  plot(data$Quantile,(data$Estimate-data$PAGE09)/1e9,col=col[i],pch=18,cex=0.7,xlab='Quantile',ylab='Difference PAGE09 Value (Billions of Dollars)',main=labs[i],ylim=c(min(data$Lower-data$PAGE09)/1e9,max(data$Upper-data$PAGE09)/1e9))
-  arrows(data$Quantile,(data$Lower-data$PAGE09)/1e9,data$Quantile,(data$Upper-data$PAGE09)/1e9,code=0,col=col[i])
+  plot(data$Quantile,(data$Estimate-data$PAGE09)/1e6,col=col[i],pch=18,cex=0.7,xlab='Quantile',ylab='Difference PAGE09 Value (Trillions of Dollars)',main=labs[i],ylim=c(min(data$Lower-data$PAGE09)/1e6,max(data$Upper-data$PAGE09)/1e6))
+  arrows(data$Quantile,(data$Lower-data$PAGE09)/1e6,data$Quantile,(data$Upper-data$PAGE09)/1e6,code=0,col=col[i])
   abline(h=0,col='black')
 }"
