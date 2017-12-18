@@ -1,0 +1,9 @@
+"model","multithreading","runs","elapsed"
+"Mimi-PAGE",false,1000,8.098425459
+"Mimi-PAGE",false,10000,77.772121948
+"Excel-PAGE",false,1000,95.0
+"Excel-PAGE",false,10000,937.0
+"Excel-PAGE",false,100000,NA
+"Excel-PAGE",true,1000,31.0
+"Excel-PAGE",true,10000,260.0
+"Excel-PAGE",true,100000,NA
