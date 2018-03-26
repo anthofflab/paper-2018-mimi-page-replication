@@ -4,7 +4,7 @@ using RCall
 #this runs the Monte Carlo simulations it takes about 10 minutes
 #if you don't want to wait for it to run you can find the output in the data folder of the paper replication
 include("src/mimi-page/src/montecarlo.jl")
-do_monte_carlo_runs(100000)
+do_monte_carlo_runs(100000) #this will take several minutes to run
 
 mc=readtable("src/mimi-page/output/mimipagemontecarlooutput.csv")
 @rput mc
@@ -46,6 +46,7 @@ R"colnames(excel)=c('Variable',quantiles)"
 R"excel=melt(excel);colnames(excel)=c('Variable','Quantile','PAGE09')"
 R"quants=merge(quants,excel)"
 
+#note that this figure will differ slightly from that in the paper, because of sampling variation
 R"x11()
 par(mfrow=c(2,2))
 for(i in 1:4){

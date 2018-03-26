@@ -1,4 +1,7 @@
 using DataFrames
+#this file contains code to run a speed test of multiple Monte Carlo runs against speeds of PAGE09 run in Excel
+#PAGE09 was run on an an Intel Core i7-4770 @3.4 GHz CPU with 16GB of main memory
+#care should be taken in comparing speeds from runs of Mimi-PAGE on different computers
 
 include("mimi-page/src/montecarlo.jl")
 
