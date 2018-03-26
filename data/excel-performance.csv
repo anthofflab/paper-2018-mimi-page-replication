@@ -1,7 +1,5 @@
 model,multithreading,runs,elapsed
 "Excel-PAGE",false,1000,95.
 "Excel-PAGE",false,10000,937.
-"Excel-PAGE",false,100000,NA
 "Excel-PAGE",true,1000,31.
 "Excel-PAGE",true,10000,260.
-"Excel-PAGE",true,100000,NA

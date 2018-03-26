@@ -1,5 +1,5 @@
 #this code makes table 1 in the main paper
-include("src/mimi-page/test/test_mainmodel.jl") #run test of full main_model
+include("mimi-page/test/test_mainmodel.jl") #run test of full main_model
 
 tempcomp=abs((temp[10]-temp_compare[10])/temp_compare[10]*100)
 gdpcomp=abs((vec(sum(gdp,2))[10]-vec(sum(gdp_compare,2))[10])/vec(sum(gdp_compare,2))[10]*100)

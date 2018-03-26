@@ -3,10 +3,10 @@ using RCall
 
 #this runs the Monte Carlo simulations it takes about 10 minutes
 #if you don't want to wait for it to run you can find the output in the data folder of the paper replication
-include("src/mimi-page/src/montecarlo.jl")
-do_monte_carlo_runs(100000) #this will take several minutes to run
+include("mimi-page/src/montecarlo.jl")
+#do_monte_carlo_runs(100000) #uncomment this line to re-run Monte Carlo runs - this will at least several minutes - half an hour
 
-mc=readtable("src/mimi-page/output/mimipagemontecarlooutput.csv")
+mc=readtable("../results/mimipagemontecarlooutput.csv")
 @rput mc
 R"quants=apply(mc[,1:4],MARGIN=2,function (x) quantile(x, probs=c(0.05,0.1,0.25,0.5,0.75,0.9,0.95)))"
 R"quantses=function(mcdata,q,alpha=0.05,n=100000){
@@ -40,7 +40,7 @@ R"vars=c('td','tpc','tac','te')"
 R"col=c('darkorange','darkblue','darkgoldenrod','darkorchid4')"
 R"labs=c('Total Damages','Total Preventative Costs','Total Adaptation Costs','Total Effect')"
 
-excel=readtable("data/excel_page_mcresults.csv")
+excel=readtable("../data/excel_page_mcresults.csv")
 @rput excel
 R"colnames(excel)=c('Variable',quantiles)"
 R"excel=melt(excel);colnames(excel)=c('Variable','Quantile','PAGE09')"
