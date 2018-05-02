@@ -19,11 +19,6 @@ gdp = vec(sum(m[:GDP,:gdp], 2))
 gdp_compare = vec(sum(readpagedata(m,"mimi-page/test/validationdata/gdp.csv"), 2))
 gdp_df = DataFrame(year = year, MimiPAGE = gdp, PAGE09 = gdp_compare)
 
-## Emissions
-emissions = m[:co2emissions,:e_globalCO2emissions]
-emissions_compare = readpagedata(m,"mimi-page/test/validationdata/e_globalCO2emissions.csv")
-emissions_df = DataFrame(year = year, MimiPAGE = emissions, PAGE09 = emissions_compare)
-
 ## Temperature
 temp = m[:ClimateTemperature,:rt_g_globaltemperature]
 temp_compare = readpagedata(m,"mimi-page/test/validationdata/rt_g_globaltemperature.csv")
