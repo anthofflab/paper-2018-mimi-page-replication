@@ -9,25 +9,25 @@ end
 ## Years
 year = [2009, 2010, 2020, 2030, 2040, 2050, 2075, 2100, 2150, 2200]
 
+df_all = DataFrame(year=Int[], Model=String[], variable=String[], value=Float64[])
+
 ## Population
 pop = vec(sum(m[:Population,:pop_population], 2))
 pop_compare = vec(sum(readpagedata(m,"mimi-page/test/validationdata/pop_population.csv"),2))
-pop_df = DataFrame(year = year, MimiPAGE = pop, PAGE09 = pop_compare)
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="population", value=pop))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="population", value=pop_compare))
 
 ## GDP
 gdp = vec(sum(m[:GDP,:gdp], 2))
 gdp_compare = vec(sum(readpagedata(m,"mimi-page/test/validationdata/gdp.csv"), 2))
-gdp_df = DataFrame(year = year, MimiPAGE = gdp, PAGE09 = gdp_compare)
-
-## Emissions
-emissions = m[:co2emissions,:e_globalCO2emissions]
-emissions_compare = readpagedata(m,"mimi-page/test/validationdata/e_globalCO2emissions.csv")
-emissions_df = DataFrame(year = year, MimiPAGE = emissions, PAGE09 = emissions_compare)
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="gdp", value=gdp))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="gdp", value=gdp_compare))
 
 ## Temperature
 temp = m[:ClimateTemperature,:rt_g_globaltemperature]
 temp_compare = readpagedata(m,"mimi-page/test/validationdata/rt_g_globaltemperature.csv")
-temp_df = DataFrame(year = year, MimiPAGE = temp, PAGE09 = temp_compare)
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="temperature", value=temp))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="temperature", value=temp_compare))
 
 ## Damages
 # Total climate damages
@@ -42,88 +42,52 @@ end
 damages=getresidualdamages(m)
 damages_compare=readpagedata(m,"mimi-page/test/validationdata/gdp.csv")-((readpagedata(m,"mimi-page/test/validationdata/rcons_per_cap_DiscRemainConsumption.csv")*1/(1-(m[:GDP,:save_savingsrate]/100)).*readpagedata(m,"mimi-page/test/validationdata/pop_population.csv"))+readpagedata(m,"mimi-page/test/validationdata/tct_totalcosts.csv")+readpagedata(m,"mimi-page/test/validationdata/act_adaptationcosts_tot.csv"))
 
-damages_df = DataFrame(year = year, MimiPAGE = vec(sum(damages,2)), PAGE09 = vec(sum(damages_compare,2)))
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="damages", value=vec(sum(damages,2))))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="damages", value=vec(sum(damages_compare,2))))
 
 ## concentration
-conc=m[:co2cycle,:c_CO2concentration]
-conc_compare=readpagedata(m,"mimi-page/test/validationdata/c_co2concentration.csv")
-conc_df=DataFrame(year = year, MimiPAGE = conc, PAGE09 = conc_compare)
+conc=m[:co2cycle,:c_CO2concentration]./1000
+conc_compare=readpagedata(m,"mimi-page/test/validationdata/c_co2concentration.csv")./1000
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="co2conc", value=conc))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="co2conc", value=conc_compare))
 
 ###ADaptation Costs
 adapt=vec(sum(m[:TotalAdaptationCosts,:act_adaptationcosts_total],2))
 adapt_compare=vec(sum(readpagedata(m,"mimi-page/test/validationdata/act_adaptationcosts_tot.csv"),2))
-adapt_df=DataFrame(year = year, MimiPAGE = adapt, PAGE09 = adapt_compare)
-
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="adaptcost", value=adapt))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="adaptcost", value=adapt_compare))
 
 using RCall
 
-R"library(tidyverse)"
-# Population Plot
-R"pop_df = $pop_df %>%
-    gather(MimiPAGE, PAGE09, key = model, value = population)"
-R"pop_plot = ggplot(pop_df, aes(x = year, y = population)) +
-    geom_line(color = 'darkblue',lwd=1)+
-    geom_point(aes(shape = model),size=3)+
-    scale_shape_manual(values=c(1, 4),name='Model')+
-    labs(y = 'Population (million persons)',
-        x = 'Year')+theme_bw()"
+R"""
+library(tidyverse)
 
-# GDP Plot
-R"gdp_df = $gdp_df %>%
-    gather(MimiPAGE, PAGE09, key = model, value = gdp)"
-R"gdp_plot = ggplot(gdp_df, aes(x = year, y = gdp)) +
-    geom_line(color = 'darkblue',lwd=1)+
-    geom_point(aes(shape = model),size=3)+
-    scale_shape_manual(values=c(1, 4),name='Model')+
-    labs(y = 'GDP (million USD)',
-        x = 'Year')+theme_bw()"
+df <- $df_all
 
-# Temperature Plot
-R"temp_df = $temp_df %>%
-    gather(MimiPAGE, PAGE09, key = model, value = temperature)"
-R"temp_plot = ggplot(temp_df, aes(x = year, y = temperature)) +
-  geom_line(color = 'darkblue',lwd=1)+
-  geom_point(aes(shape = model),size=3)+
-  scale_shape_manual(values=c(1, 4),name='Model')+
-    labs( y = 'Global Average Temperature (deg C Above Pre-Industrial)',
-        x = 'Year')+theme_bw()"
+df$variable = factor(df$variable, levels=c('population','gdp','co2conc','temperature','damages', 'adaptcost'))
 
-# Emissions ggplot
-R"emissions_df = $emissions_df %>%
-    gather(MimiPAGE, PAGE09, key = model, value = emissions)"
-R"ggplot(emissions_df, aes(x = year, y = emissions)) +
-    geom_line(color = 'darkblue',lwd=1)+
-    geom_point(aes(shape = model),size=3)+
-    scale_shape_manual(values=c(1, 4),name='Model')+
-    labs(y = 'Global CO2 Emissions (Mtons CO2)',
-        x = 'Year')+theme_bw()"
+our_labeller <- as_labeller(c('population'='Population (million persons)',
+    'gdp'='GDP (million USD)',
+    'temperature'='Global Average Temperature (deg C Above Pre-Industrial)',
+    'damages'='Total Climate Damages (million USD)',
+    'co2conc'='Atmospheric CO2 Concentration (ppm)',
+    'adaptcost'='Total Adaptation Costs (Million USD)'))
 
-# Damages Plot
-R"tot_damages_df = $damages_df %>%
-    gather(MimiPAGE, PAGE09, key = model, value = damages)"
-R"tot_damages_plot = ggplot(tot_damages_df, aes(x = year, y = damages)) +
-    geom_line(color = 'darkblue',lwd=1)+
-    geom_point(aes(shape = model),size=3)+
-    scale_shape_manual(values=c(1, 4),name='Model')+
-    labs(y = 'Total Climate Damages (million USD)',
-        x = 'Year')+theme_bw()"
+ggplot(df, aes(x=year, y=value)) +
+    geom_line(lwd=1) +
+    geom_point(aes(shape=Model), size=3) +
+    scale_shape_manual(values=c(1, 4), name='Model') +
+    facet_wrap(~variable, scales="free_y", nrow=2, strip.position="left", labeller=our_labeller) +
+    xlab('Year') +
+    ylab(NULL) +
+    theme_bw() +
+    theme(strip.background = element_blank(),
+        strip.placement = "outside",
+        text = element_text(size=10),
+        legend.position=c(0.485, 0.9), 
+        legend.background = element_rect(fill="white", size=0.1, linetype="solid", colour ="black"))
 
-#Concentration Plot
-R"conc_df = $conc_df %>%
-    gather(MimiPAGE, PAGE09, key = model, value = concentration)"
-R"conc_plot = ggplot(conc_df, aes(x = year, y = concentration/1000)) +
-    geom_line(color = 'darkblue',lwd=1)+
-    geom_point(aes(shape = model),size=3)+
-    scale_shape_manual(values=c(1, 4),name='Model')+
-    labs(y = 'Atmospheric CO2 Concentration (ppm)',
-        x = 'Year')+theme_bw()"
-
-#Adaptation Plot
-R"adapt_df = $adapt_df %>%
-    gather(MimiPAGE, PAGE09, key = model, value = adaptation)"
-R"adapt_plot = ggplot(adapt_df, aes(x = year, y = adaptation)) +
-    geom_line(color = 'darkblue',lwd=1)+
-    geom_point(aes(shape = model),size=3)+
-    scale_shape_manual(values=c(1, 4),name='Model')+
-    labs(y = 'Total Adaptation Costs (Million USD)',
-        x = 'Year')+theme_bw()"
+ggsave("../results/figure1.pdf", width=6.5, units="in")
+ggsave("../results/figure1.eps", width=6.5, units="in")
+ggsave("../results/figure1.png", width=6.5, units="in")
+"""
