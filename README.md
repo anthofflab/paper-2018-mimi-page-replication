@@ -32,6 +32,10 @@ run the following:
 install.packages("tidyverse")
 ````
 
+You also need to download the file ``Rallfun-v34.txt`` from
+[here](https://dornsife.usc.edu/assets/sites/239/docs/Rallfun-v34.txt) and
+place it in the ``src`` folder.
+
 ## Cloning the repository
 
 This git repository uses a git submodule for Mimi-PAGE. To ensure the submodule gets properly downloaded, make sure to use the
@@ -72,20 +76,19 @@ in the ``@RISK Simulating`` window.
 The runs were performed on a system with an Intel Core i7-4770 @ 3.4GHz
 CPU that had 16 GB of main memory.
 
-### `data/excel_page_mcresults.csv`
+### `data/PAGE09_mc_policya_100k.csv`
 
-This contains quantiles (5%, 10%, 25%, 50%, 75%, 90%, and 95%) for
+This contains the raw Monte Carlo output from the Excel version of PAGE09 for
 each of four main outputs from the Excel PAGE '09 model: `td` (total
 damages), `tac` (total adaptation costs), `tpc` (total preventative
 costs), and `te` (total effect, combining these three).
 
-### `results/mimipagemontecarlooutput.csv`
+### `src/mimi-page/output/mimipagemontecarlooutput.csv`
 
 To generate the Monte Carlo comparison graph, you will need to run the
 `montecarlo.jl` script in Mimi-PAGE.  This will generate a file
-`output/mimipagemontecarlooutput.csv`, which includes the values for a
-number of output metrics for each Monte Carlo run.  Copy this file to
-`results/mimipagemontecarlooutput.csv` to generate the output graphs.
+`src/mimi-page/output/mimipagemontecarlooutput.csv`, which includes the values for a
+number of output metrics for each Monte Carlo run.
 
 ## Result tables
 
@@ -104,19 +107,4 @@ script:
 
 ## Result plots
 
-### Deterministic results:
-
-The results will appear as separate windows.  If these are
-over-written in the same window, you can execute each of the "Plot"
-blocks in the `deterministicgraphs.jl`, which is included in
-`main.jl`.  Specifically, the script produces timeseries for
-population, GDP, temperature, emissions, total damages, CO2
-concentration, and adaptation costs.
-
-### Stochastic results
-
-The Monte Carlo comparison graph is produced by `mccomp.jl`.  Please
-note the required `results/mimipagemontecarlooutput.csv` for
-generating this graph.  It uncertainty for the Monte Carlo results for
-each quantile reported by in the corresponding
-`data/excel_page_mcresults.csv` file.
+All results plots are saved in the folder ``results`` in various formats.
