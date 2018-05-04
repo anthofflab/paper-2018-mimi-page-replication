@@ -85,7 +85,9 @@ ggplot(df, aes(x=year, y=value)) +
         strip.placement = "outside",
         text = element_text(size=10),
         legend.position=c(0.485, 0.9), 
-        legend.background = element_rect(fill="white", size=0.1, linetype="solid", colour ="black"))
+        legend.background = element_rect(fill="white", size=0.1, linetype="solid", colour ="black"),
+        panel.grid.major=element_blank(),
+        panel.grid.minor=element_blank())
 
 ggsave("../results/figure2.pdf", width=6.5, units="in")
 ggsave("../results/figure2.eps", width=6.5, units="in")
