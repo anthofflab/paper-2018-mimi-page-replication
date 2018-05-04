@@ -38,7 +38,7 @@ ggplot(df_res, aes(q)) +
     geom_pointrange(aes(y=est.1_minus_est.2, ymin=ci.low, ymax=ci.up), shape=4) + 
     facet_wrap(~variable, scales="free", nrow=2, labeller=our_labeller) +
     xlab('Quantile') +
-    ylab('Difference PAGE09 and Mimi-Page') +
+    ylab('Mimi-PAGE - PAGE09') +
     theme_bw() +
     theme(strip.background=element_blank(),
         text=element_text(size=10),
