@@ -18,10 +18,10 @@ quants <- c(0.05,0.1,0.25,0.5,0.75,0.9,0.95)
 
 n <- 100000
 
-df_res_te <- qcomhdMC(df_mimipage$te[1:n], df_page$te[1:n], plotit=FALSE, q=quants)
-df_res_tac <- qcomhdMC(df_mimipage$tac[1:n], df_page$tac[1:n], plotit=FALSE, q=quants)
-df_res_tpc <- qcomhdMC(df_mimipage$tpc[1:n], df_page$tpc[1:n], plotit=FALSE, q=quants)
-df_res_td <- qcomhdMC(df_mimipage$td[1:n], df_page$td[1:n], plotit=FALSE, q=quants)
+df_res_te <- qcomhdMC(df_mimipage$te[1:n]/1e6, df_page$te[1:n]/1e6, plotit=FALSE, q=quants)
+df_res_tac <- qcomhdMC(df_mimipage$tac[1:n]/1e6, df_page$tac[1:n]/1e6, plotit=FALSE, q=quants)
+df_res_tpc <- qcomhdMC(df_mimipage$tpc[1:n]/1e6, df_page$tpc[1:n]/1e6, plotit=FALSE, q=quants)
+df_res_td <- qcomhdMC(df_mimipage$td[1:n]/1e6, df_page$td[1:n]/1e6, plotit=FALSE, q=quants)
 
 df_res <- bind_rows(list(te=df_res_te,tac=df_res_tac,tpc=df_res_tpc,td=df_res_td), .id="variable")
 
@@ -39,7 +39,7 @@ ggplot(df_res, aes(q)) +
     geom_pointrange(aes(y=est.1_minus_est.2, ymin=ci.low, ymax=ci.up), shape=4) + 
     facet_wrap(~variable, scales="free", nrow=2, labeller=our_labeller) +
     xlab('Quantile') +
-    ylab('Mimi-PAGE - PAGE09') +
+    ylab('Mimi-PAGE - PAGE09 (trillion USD)') +
     theme_bw() +
     theme(strip.background=element_blank(),
         text=element_text(size=10),
