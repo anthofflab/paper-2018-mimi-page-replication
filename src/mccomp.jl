@@ -2,9 +2,8 @@
 using RCall
 
 #this runs the Monte Carlo simulations it takes about 10 minutes
-#if you don't want to wait for it to run you can find the output in the data folder of the paper replication
 include("mimi-page/src/montecarlo.jl")
-#do_monte_carlo_runs(100000) #uncomment this line to re-run Monte Carlo runs - this will at least several minutes - half an hour
+do_monte_carlo_runs(100000)
 
 R"""
 library(tidyverse)
