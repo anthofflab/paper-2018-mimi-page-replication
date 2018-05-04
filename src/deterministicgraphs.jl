@@ -87,7 +87,7 @@ ggplot(df, aes(x=year, y=value)) +
         legend.position=c(0.485, 0.9), 
         legend.background = element_rect(fill="white", size=0.1, linetype="solid", colour ="black"))
 
-ggsave("../results/figure1.pdf", width=6.5, units="in")
-ggsave("../results/figure1.eps", width=6.5, units="in")
-ggsave("../results/figure1.png", width=6.5, units="in")
+ggsave("../results/figure2.pdf", width=6.5, units="in")
+ggsave("../results/figure2.eps", width=6.5, units="in")
+ggsave("../results/figure2.png", width=6.5, units="in")
 """
