@@ -27,7 +27,7 @@ df_res <- bind_rows(list(te=df_res_te,tac=df_res_tac,tpc=df_res_tpc,td=df_res_td
 
 df_res$variable = factor(df_res$variable, levels=c('td','tpc','tac','te'))
 
-write_csv(df_res, "../results/quantile_comp.csv")
+write_csv(df_res, "../results/quantilecomparison.csv")
 
 our_labeller <- as_labeller(c('te'='Total Effect',
     'tac'='Total Adaptation Costs',
