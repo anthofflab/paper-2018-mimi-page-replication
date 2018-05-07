@@ -20,8 +20,8 @@ append!(df_all, DataFrame(year=year, Model="PAGE09", variable="population", valu
 ## GDP
 gdp = vec(sum(m[:GDP,:gdp], 2))
 gdp_compare = vec(sum(readpagedata(m,"mimi-page/test/validationdata/gdp.csv"), 2))
-append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="gdp", value=gdp))
-append!(df_all, DataFrame(year=year, Model="PAGE09", variable="gdp", value=gdp_compare))
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="gdp", value=gdp./1e6))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="gdp", value=gdp_compare./1e6))
 
 ## Temperature
 temp = m[:ClimateTemperature,:rt_g_globaltemperature]
@@ -42,8 +42,8 @@ end
 damages=getresidualdamages(m)
 damages_compare=readpagedata(m,"mimi-page/test/validationdata/gdp.csv")-((readpagedata(m,"mimi-page/test/validationdata/rcons_per_cap_DiscRemainConsumption.csv")*1/(1-(m[:GDP,:save_savingsrate]/100)).*readpagedata(m,"mimi-page/test/validationdata/pop_population.csv"))+readpagedata(m,"mimi-page/test/validationdata/tct_totalcosts.csv")+readpagedata(m,"mimi-page/test/validationdata/act_adaptationcosts_tot.csv"))
 
-append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="damages", value=vec(sum(damages,2))))
-append!(df_all, DataFrame(year=year, Model="PAGE09", variable="damages", value=vec(sum(damages_compare,2))))
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="damages", value=vec(sum(damages,2))./1e6))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="damages", value=vec(sum(damages_compare,2))./1e6))
 
 ## concentration
 conc=m[:co2cycle,:c_CO2concentration]./1000
@@ -54,8 +54,8 @@ append!(df_all, DataFrame(year=year, Model="PAGE09", variable="co2conc", value=c
 ###ADaptation Costs
 adapt=vec(sum(m[:TotalAdaptationCosts,:act_adaptationcosts_total],2))
 adapt_compare=vec(sum(readpagedata(m,"mimi-page/test/validationdata/act_adaptationcosts_tot.csv"),2))
-append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="adaptcost", value=adapt))
-append!(df_all, DataFrame(year=year, Model="PAGE09", variable="adaptcost", value=adapt_compare))
+append!(df_all, DataFrame(year=year, Model="Mimi-PAGE", variable="adaptcost", value=adapt./1e6))
+append!(df_all, DataFrame(year=year, Model="PAGE09", variable="adaptcost", value=adapt_compare./1e6))
 
 using RCall
 
@@ -67,11 +67,11 @@ df <- $df_all
 df$variable = factor(df$variable, levels=c('population','gdp','co2conc','temperature','damages', 'adaptcost'))
 
 our_labeller <- as_labeller(c('population'='Population (million persons)',
-    'gdp'='GDP (million USD)',
+    'gdp'='GDP (trillion USD)',
     'temperature'='Global Average Temperature (deg C Above Pre-Industrial)',
-    'damages'='Total Climate Damages (million USD)',
+    'damages'='Total Climate Damages (trillion USD)',
     'co2conc'='Atmospheric CO2 Concentration (ppm)',
-    'adaptcost'='Total Adaptation Costs (Million USD)'))
+    'adaptcost'='Total Adaptation Costs (trillion USD)'))
 
 ggplot(df, aes(x=year, y=value)) +
     geom_line(lwd=1) +
