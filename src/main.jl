@@ -1,5 +1,12 @@
+using RCall, CSVFiles, DataFrames
 # This is the main replication file for the paper results.
-#Working directory should be "paper-mimi-page-replication/src"
+cd(@__DIR__)
+
+# Set a random number generator seed in julia and R so that all results
+# reproduce exactly
+srand(50)
+R"set.seed(5)"
+
 
 #Table 1: % difference for deterministic Run
 include("deterministiccomp.jl")
