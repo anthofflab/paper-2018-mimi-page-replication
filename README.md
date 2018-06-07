@@ -20,7 +20,7 @@ to do so:
 Pkg.add("Mimi")
 Pkg.add("Distributions")
 Pkg.add("DataFrames")
-Pkg.add("Missings")
+Pkg.add("CSVFiles")
 Pkg.add("RCall")
 ````
 

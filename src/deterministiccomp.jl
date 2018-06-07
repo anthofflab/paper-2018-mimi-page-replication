@@ -16,4 +16,4 @@ push!(df, ("Global Adaptation Costs in 2200", adaptcomp))
 push!(df, ("US Per-Capita Consumption after All Damages in 2200", damagescomp))
 push!(df, ("Total Effect", tecomp))
 
-writetable(joinpath(@__DIR__, "../results/deterministiccomparison.csv"), df)
+save(joinpath(@__DIR__, "../results/deterministiccomparison.csv"), df)
