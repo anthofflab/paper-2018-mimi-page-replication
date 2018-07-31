@@ -33,7 +33,7 @@ install.packages("tidyverse")
 ````
 
 You also need to download the file ``Rallfun-v34.txt`` from
-[here](https://dornsife.usc.edu/assets/sites/239/docs/Rallfun-v34.txt) and
+[here](https://dornsife.usc.edu/assets/sites/239/docs/Rallfun-v35.txt) and
 place it in the ``src`` folder.
 
 ## Cloning the repository
