@@ -6,8 +6,9 @@ Assessment Model".
 
 ## Software requirements
 
-You need to install [Julia](http://julialang.org/)
-and [R](https://www.r-project.org/) to run the replication code.
+To run the replication code, you need to install:
+- version v0.6.4 of [Julia](https://julialang.org/downloads/oldreleases.html)
+- and [R](https://www.r-project.org/)
 
 ## Preparing the software environment
 
