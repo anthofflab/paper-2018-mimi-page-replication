@@ -6,8 +6,9 @@ Assessment Model".
 
 ## Software requirements
 
-You need to install [Julia](http://julialang.org/)
-and [R](https://www.r-project.org/) to run the replication code.
+To run the replication code, you need to install:
+- version v0.6.4 of [Julia](https://julialang.org/downloads/oldreleases.html)
+- and [R](https://www.r-project.org/)
 
 ## Preparing the software environment
 
@@ -22,6 +23,8 @@ Pkg.add("Distributions")
 Pkg.add("DataFrames")
 Pkg.add("CSVFiles")
 Pkg.add("RCall")
+
+Pkg.pin("Mimi", v"0.4.1")
 ````
 
 On the R side of things you also need to install a number packages,
@@ -32,7 +35,7 @@ run the following:
 install.packages("tidyverse")
 ````
 
-You also need to download the file ``Rallfun-v34.txt`` from
+You also need to download the file ``Rallfun-v35.txt`` from
 [here](https://dornsife.usc.edu/assets/sites/239/docs/Rallfun-v35.txt) and
 place it in the ``src`` folder.
 
@@ -43,7 +46,7 @@ git ``--recurse-submodules`` option when cloning the repository.
 That is, you can clone the repository from the command-line with:
 
 ```sh
-git clone --recurse-submodules https://github.com/anthofflab/mimi-page.jl.git
+git clone --recurse-submodules https://github.com/anthofflab/paper-2018-mimi-page-replication.jl.git
 ```
 
 If you cloned the repository without that option, you can issue the
